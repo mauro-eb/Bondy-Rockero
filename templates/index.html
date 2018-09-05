@@ -54,7 +54,7 @@ function myMap() {
     zoom: 10
     };
     map = new google.maps.Map(mapCanvas, mapOptions);
-   
+
 }
 
 $(document).ready(function() {
@@ -75,7 +75,7 @@ $(document).ready(function() {
                     map: map,
                     title: element.event.name.text
                 });
-                $('#list-event').append('<div><a href="' + 
+                $('#list-event').append('<div><a href="' +
                     element.event.url + '#tickets' +
                     '" target="blank" class="list-group-item list-group-item-action">' +
                     element.event.name.text +
@@ -83,7 +83,7 @@ $(document).ready(function() {
             });
         }
         ).fail(function(){
-            alert("Fallo llamanda /performances");
+            alert("Fallo llamada /performances");
         });
   });
 })
