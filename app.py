@@ -5,7 +5,6 @@ from flask import (
 )
 import requests
 import app
-import jsonify
 import json
 
 
@@ -35,16 +34,6 @@ def get_artist(artist_id):
         )
     )
     return response.text
-
-
-@app.route('/status/', methods=['GET'])
-def get_status():
-    return jsonify([
-        {
-            'api_key': app.config['EB_API_KEY'],
-            'jok': 2
-        }
-    ])
 
 
 @app.route('/performance/', methods=['GET'])
