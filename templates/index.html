@@ -26,13 +26,17 @@
         }
 
         .list-group-mine .list-group-item {
-     color: black;
-     width: 150%;
-  }
+            color: black;
+            width: 100%;
+        }
 
-  .list-group-mine .list-group-item:hover {
-    background-color: rgb(167, 166, 166);
-  }
+        .list-group-mine .list-group-item:hover {
+            background-color: rgb(167, 166, 166);
+        }
+        .right {
+            overflow-y: scroll;
+            max-height: 90%;
+        }
     </style>
 </head>
 <body>
@@ -42,15 +46,12 @@
                 <div id="map"></div>
             </div>
             <div class="form-group col-sm-4">
-                <div class="row">
-                    <h1 class="display-3">Artista</h1>
-                </div>
-                <div class="row ">
+                <div class="row py-2">
                     <input id='input-name' type="text" placeholder="Search an Artist.." name="search" class="form-control-lg">
                     <button id="button-search" type="submit" class="btn btn-secondary btn-lg active"><i class="fa fa-search"></i></button>
                 </div>
                 <br>
-                <div class="row ">
+                <div class="row right">
                     <div id='list-event' class="list-group list-group-mine"></div>
                 </div>
         </div>
