@@ -12,7 +12,7 @@ app.config.from_pyfile('config.py')
 
 @app.route('/artists/', methods=['GET'])
 def get_artists():
-    response = requests.get('https://www.evbqaapi.com/v3/artists/?token={token}&expand=extended_data'.format(
+    response = requests.get('https://www.evbqaapi.com/v3/artists/?token={token}'.format(
             token=os.environ["EB_API_KEY"],
         )
     )
@@ -21,7 +21,7 @@ def get_artists():
 
 @app.route('/artists/<int:artist_id>/', methods=['GET'])
 def get_artist(artist_id):
-    response = requests.get('https://www.evbqaapi.com/v3/artists/{artist_id}/?token={token}&expand=extended_data'.format(
+    response = requests.get('https://www.evbqaapi.com/v3/artists/{artist_id}/?token={token}'.format(
             artist_id=artist_id,
             token=os.environ["EB_API_KEY"],
         )
