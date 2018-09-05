@@ -52,6 +52,7 @@
                     <button id="button-search" type="submit" class="btn btn-secondary btn-lg active"><i class="fa fa-search"></i></button>
                 </div>
                 <br>
+                <div id="spotify-player"></div>
                 <div class="row right">
                     <div id='list-event' class="list-group list-group-mine"></div>
                 </div>
@@ -79,6 +80,7 @@ $(document).ready(function() {
         $searchIcon = $buttonSearch.find("i"),
         $inputArtist = $('#input-name'),
         $listEvent = $('#list-event'),
+        $spotifyPlayer = $('#spotify-player'),
         spinnerClass = "fa-circle-o-notch fa-spin";
 
     $inputArtist.keypress(function (key) {
@@ -97,6 +99,7 @@ $(document).ready(function() {
         function(response){
             data = $.parseJSON(response);
             $listEvent.html('');
+            $spotifyPlayer.html('');
             // For each
 
             var waypoints = [];
@@ -176,6 +179,16 @@ $(document).ready(function() {
                         '<p class="mb-1">' + element.event.description.text + '</p>' +
                     '</a></div>')
             });
+
+            firstArtist = data.performances[0].artists[0].partner_artists[0];
+            if (firstArtist.partner_name === 'SPOTIFY') {
+                var spotifyArtistId = firstArtist['partner_artist_id'];
+                spotifyArtistId = spotifyArtistId.replace('spotify:artist:', '');
+
+                $spotifyPlayer.append(
+                    '<iframe src="https://open.spotify.com/embed/artist/' + spotifyArtistId + '" width="95%" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>'
+                );
+            };
 
             directionsService.route({
                 origin: origin,
