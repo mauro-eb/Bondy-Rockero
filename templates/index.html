@@ -1,9 +1,50 @@
-<!doctype html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bondy Roquero</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</head>
+<body>
 
-<title>Hello from Flask</title>
-{% if name %}
-<h1>Hola Vieja {{ name }}</h1>
-<h2>Maluma del medioevo</h2>
-{% else %}
-<h1>Hello, World!</h1>
-{% endif %}
+<div class="jumbotron text-center">
+  <h1>Mapa bien piola</h1>
+</div>
+  
+<div class="container">
+  <div class="row">
+    <div class="col-sm-8">
+            <div id="map" style="width:100%;height:400px;"></div>
+    </div>
+    <div class="col-sm-4">
+      <h3>Artista</h3>
+      <input type="text" class="form-control" aria-label="Artista" aria-describedby="inputGroup-sizing-sm">
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
+
+<script>
+function myMap() {
+    var myLatLng = new google.maps.LatLng(51.5, -0.2);
+    var mapCanvas = document.getElementById("map");
+    var mapOptions = {
+    center: myLatLng,
+    zoom: 10
+    };
+    var map = new google.maps.Map(mapCanvas, mapOptions);
+    var marker = new google.maps.Marker({
+          position: myLatLng,
+          map: map,
+          title: 'Bondy Rockero!'
+        });
+}
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?callback=myMap"></script>

@@ -14,13 +14,15 @@ app.config.from_pyfile('config.py')
 
 @app.route("/")
 def hello():
-    return render_template('index.html', name='Elpi')
+    return render_template('index.html', name='Mala Fama')
 
 
 @app.route('/artists/', methods=['GET'])
 def get_artists():
-    response = requests.get('https://www.evbqaapi.com/v3/artists/?token={token}'.format(
+    name = request.args.get('name')
+    response = requests.get('https://www.evbqaapi.com/v3/artists/?token={token}&name_filter={name_filter}'.format(
             token=app.config["EB_API_KEY"],
+            name_filter=name,
         )
     )
     return response.text
@@ -36,12 +38,13 @@ def get_artist(artist_id):
     return response.text
 
 
-@app.route('/performance/', methods=['GET'])
+@app.route('/performances/', methods=['GET'])
 def get_performances():
     artist_ids = request.args.get('artist_ids')
     contents = requests.get(
-        'http://www.evbqaapi.com/v3/performances?token={token}&artist_ids={artist_ids}'.format(
+        'http://www.evbqaapi.com/v3/performances?token={token}&artist_ids={artist_ids}&expand={expand}'.format(
             token=app.config['EB_API_KEY'],
             artist_ids=artist_ids,
+            expand='event,event.venue',
         ))
     return contents.text
