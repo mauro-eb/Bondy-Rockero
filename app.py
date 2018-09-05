@@ -43,6 +43,6 @@ def get_performances():
         'http://www.evbqaapi.com/v3/performances?token={token}&artist_ids={artist_ids}&expand={expand}'.format(
             token=app.config['EB_API_KEY'],
             artist_ids=artist_id,
-            expand='event,event.venue',
+            expand='event,event.venue,event.logo',
         ))
     return contents.text
