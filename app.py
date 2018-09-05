@@ -1,13 +1,21 @@
 from flask import (
     Flask,
     render_template,
+    request,
 )
 import requests
 import app
 import jsonify
+import json
+
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
+
+
+@app.route("/")
+def hello():
+    return render_template('index.html', name='Elpi')
 
 
 @app.route('/artists/', methods=['GET'])
@@ -37,3 +45,14 @@ def get_status():
             'jok': 2
         }
     ])
+
+
+@app.route('/performance/', methods=['GET'])
+def get_performances():
+    artist_ids = request.args.get('artist_ids')
+    contents = requests.get(
+        'http://www.evbqaapi.com/v3/performances?token={token}&artist_ids={artist_ids}'.format(
+            token=app.config['EB_API_KEY'],
+            artist_ids=artist_ids,
+        ))
+    return contents.text

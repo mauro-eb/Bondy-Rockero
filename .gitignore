@@ -22,5 +22,10 @@ htmlcov/
 .coverage.*
 *,cover
 
+<<<<<<< HEAD
 config.py
 tags
+=======
+#config
+.config.py
+>>>>>>> Performance endpoint
