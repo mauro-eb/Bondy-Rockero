@@ -27,6 +27,7 @@
 
         .list-group-mine .list-group-item {
      color: black;
+     width: 150%;
   }
 
   .list-group-mine .list-group-item:hover {
@@ -121,7 +122,7 @@ $(document).ready(function() {
               }
             });
             directionsDisplay.setMap(map);
-            
+
             data.performances.forEach(function(element, idx, array) {
                 if (idx === 0) {
                     origin = new google.maps.LatLng(element.event.venue.latitude, element.event.venue.longitude);
