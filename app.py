@@ -6,7 +6,7 @@ from flask import (
 import json
 
 app = Flask(__name__)
-
+app.config.from_pyfile('config.py')
 
 @app.route("/")
 def hello():
@@ -29,3 +29,12 @@ def get_artist(artist_id):
         'artist_id': artist_id,
         'name': 'nombre',
       })
+
+
+@app.route('/status/', methods=['GET'])
+def get_status():
+    return jsonify([
+        {
+            'api_key': app.config['EB_API_KEY'],
+        }
+    ])
