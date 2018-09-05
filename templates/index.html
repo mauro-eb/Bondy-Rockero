@@ -8,6 +8,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
         html,body {
@@ -93,6 +94,7 @@ $(document).ready(function() {
         function(response){
             data = $.parseJSON(response);
             $listEvent.html('');
+            // For each
 
             var waypoints = [];
             var origin;
@@ -130,9 +132,17 @@ $(document).ready(function() {
                 else {
                     waypoints.push({ location: new google.maps.LatLng(element.event.venue.latitude, element.event.venue.longitude), stopover: true });
                 }
+
+                var startDate = moment(element.event.start.local).format("MMM Do YY")
                 $listEvent.append(
-                  '<div><a href="' + element.event.url + '#tickets' + '" target="blank" class="list-group-item">' + element.event.name.text + '</a></div>'
-                )
+                    '<div>' +
+                        '<a href="' + element.event.url + '#tickets' +'" target="blank" class="list-group-item list-group-item-action flex-column align-items-start">' +
+                    '<div class="d-flex w-100 justify-content-between">' +
+                        '<h5 class="mb-1">' + element.event.name.text + '</h5>' +
+                        '<small>' + startDate + '</small>' +
+                    '</div>' +
+                        '<p class="mb-1">' + element.event.description.text + '</p>' +
+                    '</a></div>')
             });
 
             directionsService.route({
