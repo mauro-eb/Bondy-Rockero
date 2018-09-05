@@ -162,6 +162,7 @@ $(document).ready(function() {
                 });
                 marker.addListener('mouseout', function() {
                     infowindow.close();
+                    $(elemid).css("background-color", "white");
                 });
 
                 var startDate = moment(element.event.start.local).format("MMM Do YY")
