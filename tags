@@ -1,0 +1,20 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	0.0.0	/7e087c5/
+EB_API_KEY	config.py	/^EB_API_KEY = 'tuvieja'/;"	v
+El Bondi Rockero	README.md	/^# El Bondi Rockero$/;"	c
+Hello, World!	templates/index.html	/^<h1>Hello, World!<\/h1>$/;"	h
+Hola Vieja {{ name }}	templates/index.html	/^<h1>Hola Vieja {{ name }}<\/h1>$/;"	h
+Indicate flask to reload automatically	README.md	/^# Indicate flask to reload automatically$/;"	c
+Indicate that is under development mode	README.md	/^# Indicate that is under development mode$/;"	c
+Indicate the app	README.md	/^# Indicate the app$/;"	c
+Make templates render every time	README.md	/^# Make templates render every time$/;"	c
+Maluma del medioevo	templates/index.html	/^<h2>Maluma del medioevo<\/h2>$/;"	i
+app	app.py	/^app = Flask(__name__)$/;"	v
+get_artist	app.py	/^def get_artist(artist_id):$/;"	f
+get_artists	app.py	/^def get_artists():$/;"	f
+get_status	app.py	/^def get_status():$/;"	f

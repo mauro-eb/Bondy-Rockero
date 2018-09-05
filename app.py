@@ -1,34 +1,32 @@
 from flask import (
     Flask,
-    jsonify,
     render_template,
 )
-import json
+import requests
+import os
+import jsonify
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
 
-@app.route("/")
-def hello():
-    return render_template('index.html', name='Elpi')
-
 
 @app.route('/artists/', methods=['GET'])
 def get_artists():
-    return jsonify([
-        {
-            'artist_id': 1,
-            'name': 'nombre',
-        }
-    ])
+    response = requests.get('https://www.evbqaapi.com/v3/artists/?token={token}&expand=extended_data'.format(
+            token=os.environ["EB_API_KEY"],
+        )
+    )
+    return response.content
 
 
 @app.route('/artists/<int:artist_id>/', methods=['GET'])
 def get_artist(artist_id):
-    return jsonify({
-        'artist_id': artist_id,
-        'name': 'nombre',
-      })
+    response = requests.get('https://www.evbqaapi.com/v3/artists/{artist_id}/?token={token}&expand=extended_data'.format(
+            artist_id=artist_id,
+            token=os.environ["EB_API_KEY"],
+        )
+    )
+    return response.content
 
 
 @app.route('/status/', methods=['GET'])
