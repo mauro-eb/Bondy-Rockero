@@ -14,7 +14,7 @@
 <div class="jumbotron text-center">
   <h1>Mapa bien piola</h1>
 </div>
-  
+
 <div class="container">
   <div class="row">
     <div class="col-sm-8">
@@ -23,6 +23,7 @@
     <div class="col-sm-4">
       <h3>Artista</h3>
       <input type="text" class="form-control" aria-label="Artista" aria-describedby="inputGroup-sizing-sm">
+      <button id="button-search" style="margin-top:10px" type="button" class="btn btn-primary">Buscar peformances</button>
     </div>
   </div>
 </div>
@@ -45,6 +46,22 @@ function myMap() {
           title: 'Bondy Rockero!'
         });
 }
+
+$(document).ready(function() {
+  $('#button-search').on('click', function(){
+      $.get(
+        '/performances',
+        {
+          artist_ids: []
+        },
+        function(response){
+          alert("Bien: " + response);
+        }
+      ).fail(function(){
+        alert("Fallo llamanda /performances");
+      });
+  });
+})
 </script>
 
 <script src="https://maps.googleapis.com/maps/api/js?callback=myMap"></script>

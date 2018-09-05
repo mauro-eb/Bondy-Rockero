@@ -22,10 +22,9 @@ htmlcov/
 .coverage.*
 *,cover
 
-<<<<<<< HEAD
 config.py
 tags
-=======
 #config
 .config.py
->>>>>>> Performance endpoint
+set_env.sh
+
