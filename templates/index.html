@@ -157,6 +157,8 @@ $(document).ready(function() {
                 });
                 marker.addListener('mouseover', function() {
                     infowindow.open(map, marker);
+                    elemid = document.getElementById(element.event.id);
+                    $(elemid).css("background-color", "rgb(167, 166, 166)");
                 });
                 marker.addListener('mouseout', function() {
                     infowindow.close();
@@ -165,7 +167,7 @@ $(document).ready(function() {
                 var startDate = moment(element.event.start.local).format("MMM Do YY")
                 $listEvent.append(
                     '<div>' +
-                        '<a href="' + element.event.url + '#tickets' +'" target="blank" class="list-group-item list-group-item-action flex-column align-items-start">' +
+                        '<a id="'+ element.event.id +'" href="' + element.event.url + '#tickets' +'" target="blank" class="list-group-item list-group-item-action flex-column align-items-start">' +
                     '<div class="d-flex w-100 justify-content-between">' +
                         '<h5 class="mb-1">' + element.event.name.text + '</h5>' +
                         '<small>' + startDate + '</small>' +
