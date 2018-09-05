@@ -11,6 +11,9 @@ import json
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
 
+@app.route("/")
+def hello():
+    return render_template('index.html', name='Mala Fama')
 
 def get_artists(name):
     response = requests.get('https://www.evbqaapi.com/v3/artists/?token={token}&name={name}'.format(
