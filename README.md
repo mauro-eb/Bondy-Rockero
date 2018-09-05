@@ -11,6 +11,8 @@ pip install flask
 export FLASK_APP=app.py
 # Indicate that is under development mode
 export FLASK_ENV=development
+# Indicate flask to reload automatically
+export FLASK_DEBUG=1
 # Make templates render every time
 export TEMPLATES_AUTO_RELOAD=True
 ```

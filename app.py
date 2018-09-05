@@ -36,5 +36,6 @@ def get_status():
     return jsonify([
         {
             'api_key': app.config['EB_API_KEY'],
+            'jok': 2
         }
     ])
