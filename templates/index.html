@@ -127,18 +127,26 @@ $(document).ready(function() {
 
             data.performances.forEach(function(element, idx, array) {
 
-                if (idx === 0) {
-                    origin = new google.maps.LatLng(element.event.venue.latitude, element.event.venue.longitude);
-                }
-                else if (idx === array.length - 1) {
-                    destination = new google.maps.LatLng(element.event.venue.latitude, element.event.venue.longitude);
-                }
-                else {
-                    waypoints.push({ location: new google.maps.LatLng(element.event.venue.latitude, element.event.venue.longitude), stopover: true });
-                }
+               if (idx === 0) {
+                   origin = new google.maps.LatLng(element.event.venue.latitude, element.event.venue.longitude);
+               }
+               else if (idx === array.length - 1) {
+                   destination = new google.maps.LatLng(element.event.venue.latitude, element.event.venue.longitude);
+               }
+               else {
+                   waypoints.push({ location: new google.maps.LatLng(element.event.venue.latitude, element.event.venue.longitude), stopover: true });
+               }
+               var contentString = '<div id="content">'+
+                    '<div id="siteNotice">'+
+                    '</div>'+
+                    '<h2 id="firstHeading" class="firstHeading">' + element.event.name.html + '</h2>'+
+                    '<div id="bodyContent">'+
+                    '<img src="' + element.event.logo.url + '" alt="Event logo">' +
+                    '</div>'+
+                    '</div>';
 
                 var infowindow = new google.maps.InfoWindow({
-                    content: element.event.name.html
+                    content: contentString
                 });
 
                 var marker = new google.maps.Marker({
@@ -147,8 +155,11 @@ $(document).ready(function() {
                     zIndex: 99999,
                     icon: image,
                 });
-                marker.addListener('click', function() {
+                marker.addListener('mouseover', function() {
                     infowindow.open(map, marker);
+                });
+                marker.addListener('mouseout', function() {
+                    infowindow.close();
                 });
 
                 var startDate = moment(element.event.start.local).format("MMM Do YY")
