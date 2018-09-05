@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Bondy Roquero</title>
+    <title>Bondi Rockero</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
@@ -93,19 +93,46 @@ $(document).ready(function() {
         function(response){
             data = $.parseJSON(response);
             $listEvent.html('');
-            // For each
-            data.performances.forEach(function(element) {
-                var myLatLng = new google.maps.LatLng(element.event.venue.latitude, element.event.venue.longitude);
-                var marker = new google.maps.Marker({
-                    position: myLatLng,
-                    map: map,
-                    title: element.event.name.text
-                });
-                $('#list-event').append('<div><a href="' +
-                    element.event.url + '#tickets' +
-                    '" target="blank" class="list-group-item">' +
-                    element.event.name.text +
-                    '</a></div>')
+
+            var waypoints = [];
+            var origin;
+            var destination;
+            var image = new google.maps.MarkerImage(
+              'static/elpipua.png',
+              new google.maps.Size(60, 60),
+              new google.maps.Point(0, 0),
+              new google.maps.Point(35, 55)
+            );
+            var markerOption = {
+                clickable: true,
+                flat: true,
+                icon: image,
+                visible: true,
+                map: map
+            };
+
+            var directionsService = new google.maps.DirectionsService;
+            var directionsDisplay = new google.maps.DirectionsRenderer({
+              markerOptions: markerOption,
+              polylineOptions: {
+                strokeColor: "#F05537"
+              }
+            });
+            directionsDisplay.setMap(map);
+            
+            data.performances.forEach(function(element, idx, array) {
+                if (idx === 0) {
+                    origin = new google.maps.LatLng(element.event.venue.latitude, element.event.venue.longitude);
+                }
+                else if (idx === array.length - 1) {
+                    destination = new google.maps.LatLng(element.event.venue.latitude, element.event.venue.longitude);
+                }
+                else {
+                    waypoints.push({ location: new google.maps.LatLng(element.event.venue.latitude, element.event.venue.longitude), stopover: true });
+                }
+                $listEvent.append(
+                  '<div><a href="' + element.event.url + '#tickets' + '" target="blank" class="list-group-item">' + element.event.name.text + '</a></div>'
+                )
             });
 
             directionsService.route({
