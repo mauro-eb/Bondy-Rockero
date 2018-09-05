@@ -163,7 +163,10 @@ $(document).ready(function() {
             });
         }
         ).fail(function(){
-            alert("Fallo llamada /performances");
+            $('#input-name').val("");
+            var w = window.open("", "Message", "width=400, height=200");
+            var $w = $(w.document.body);
+            $w.html("<body> <p>The Artist was not found </p></body>");
         }).always(function () {
             $searchIcon.toggleClass(spinnerClass);
         });;
