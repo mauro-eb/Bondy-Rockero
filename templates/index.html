@@ -44,19 +44,17 @@
 </html>
 
 <script>
+    var map;
+
 function myMap() {
-    var myLatLng = new google.maps.LatLng(51.5, -0.2);
+    var myLatLng = new google.maps.LatLng(-32.8894587, -68.84583859999998);
     var mapCanvas = document.getElementById("map");
     var mapOptions = {
     center: myLatLng,
     zoom: 10
     };
-    var map = new google.maps.Map(mapCanvas, mapOptions);
-    var marker = new google.maps.Marker({
-          position: myLatLng,
-          map: map,
-          title: 'Bondy Rockero!'
-        });
+    map = new google.maps.Map(mapCanvas, mapOptions);
+   
 }
 
 $(document).ready(function() {
@@ -67,13 +65,18 @@ $(document).ready(function() {
             name: $('#input-name').val()
         },
         function(response){
-            debugger
             data = $.parseJSON(response);
+
+            // For each
             data.performances.forEach(function(element) {
-                $('#list-event')
-                console.log(element.event.name);
+                var myLatLng = new google.maps.LatLng(element.event.venue.latitude, element.event.venue.longitude);
+                var marker = new google.maps.Marker({
+                    position: myLatLng,
+                    map: map,
+                    title: element.event.name.text
+                });
                 $('#list-event').append('<div><a href="' + 
-                    element.event.url +
+                    element.event.url + '#tickets' +
                     '" target="blank" class="list-group-item list-group-item-action">' +
                     element.event.name.text +
                     '</a></div>')
