@@ -126,6 +126,7 @@ $(document).ready(function() {
             directionsDisplay.setMap(map);
 
             data.performances.forEach(function(element, idx, array) {
+
                 if (idx === 0) {
                     origin = new google.maps.LatLng(element.event.venue.latitude, element.event.venue.longitude);
                 }
@@ -135,6 +136,20 @@ $(document).ready(function() {
                 else {
                     waypoints.push({ location: new google.maps.LatLng(element.event.venue.latitude, element.event.venue.longitude), stopover: true });
                 }
+
+                var infowindow = new google.maps.InfoWindow({
+                    content: element.event.name.html
+                });
+
+                var marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(element.event.venue.latitude, element.event.venue.longitude),
+                    map: map,
+                    zIndex: 99999,
+                    icon: image,
+                });
+                marker.addListener('click', function() {
+                    infowindow.open(map, marker);
+                });
 
                 var startDate = moment(element.event.start.local).format("MMM Do YY")
                 $listEvent.append(
