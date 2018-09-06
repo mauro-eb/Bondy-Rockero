@@ -155,9 +155,10 @@ $(document).ready(function() {
                     zIndex: 99999,
                     icon: image,
                 });
+
                 marker.addListener('mouseover', function() {
+                    var elemid = document.getElementById(element.event.id);
                     infowindow.open(map, marker);
-                    elemid = document.getElementById(element.event.id);
                     $(elemid).css("background-color", "rgb(167, 166, 166)");
                 });
                 marker.addListener('mouseout', function() {
@@ -174,8 +175,18 @@ $(document).ready(function() {
                         '<small>' + startDate + '</small>' +
                     '</div>' +
                         '<p class="mb-1">' + element.event.description.text + '</p>' +
-                    '</a></div>')
-            });
+                    '</a></div>');
+                var elemid = document.getElementById(element.event.id);
+                elemid.onmouseover = function(){
+                    var elemid = document.getElementById(element.event.id);
+                    infowindow.open(map, marker);
+                    }
+                elemid.onmouseout = function(){
+                var elemid = document.getElementById(element.event.id);
+                infowindow.close();
+                    }
+
+                    });
 
             directionsService.route({
                 origin: origin,
@@ -190,8 +201,7 @@ $(document).ready(function() {
                     window.alert('Directions request failed due to ' + status);
                 }
             });
-        }
-        ).fail(function(){
+        }).fail(function(){
             $('#input-name').val("");
             var w = window.open("", "Message", "width=400, height=200");
             var $w = $(w.document.body);
@@ -199,7 +209,7 @@ $(document).ready(function() {
         }).always(function () {
             $searchIcon.toggleClass(spinnerClass);
         });;
-  });
+    });
 })
 </script>
 
