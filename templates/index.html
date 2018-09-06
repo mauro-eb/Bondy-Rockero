@@ -239,6 +239,46 @@ function myMap() {
 
 }
 
+function showSpotifyPlayButton(artist) {
+    var $spotifyPlayerRow = $('#spotify-player-row'),
+        $spotifyPlayer = $('#spotify-player');
+
+    if (artist.partner_name === 'SPOTIFY') {
+        var spotifyArtistId = artist['partner_artist_id'];
+        spotifyArtistId = spotifyArtistId.replace('spotify:artist:', '');
+
+        $spotifyPlayer.append(
+            '<iframe src="https://open.spotify.com/embed/artist/' + spotifyArtistId + '" width="400px" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>'
+        );
+
+        $spotifyPlayerRow.css("display", "flex");
+    };
+}
+
+function getPerformanceRowHTML(ebEvent) {
+    var startDate = moment(ebEvent.start.local).format("MMM Do YY");
+
+    return '<div class="py-1">' +
+        '<a id="'+ ebEvent.id +'" href="' + ebEvent.url + '#tickets' +'" target="blank" class="list-group-item list-group-item-action flex-column align-items-start">' +
+    '<div class="d-flex w-100 justify-content-between">' +
+        '<h5 class="mb-1">' + ebEvent.name.text + '</h5>' +
+        '<small>' + startDate + '</small>' +
+    '</div>' +
+        '<p class="mb-1">' + ebEvent.description.text + '</p>' +
+    '</a></div>';
+}
+
+function getPerformanceInfowindowHTML(ebEvent) {
+    return '<div id="content">'+
+    '<div id="siteNotice">'+
+    '</div>'+
+    '<h3 id="firstHeading" class="firstHeading">' + ebEvent.name.html + '</h3>'+
+    '<div id="bodyContent">'+
+    '<img src="' + ebEvent.logo.url + '" alt="Event logo">' +
+    '</div>'+
+    '</div>';
+}
+
 $(document).ready(function() {
     var $buttonSearch = $('#button-search'),
         $searchIcon = $buttonSearch.find("i"),
@@ -295,36 +335,30 @@ $(document).ready(function() {
                 directionsDisplay.setMap(map);
 
                 data.performances.forEach(function(element, idx, array) {
+                    var ebEvent = element.event;
 
-                   if (idx === 0) {
-                       origin = new google.maps.LatLng(element.event.venue.latitude, element.event.venue.longitude);
-                   } else if (idx === array.length - 1) {
-                       destination = new google.maps.LatLng(element.event.venue.latitude, element.event.venue.longitude);
-                   } else {
-                       waypoints.push({ location: new google.maps.LatLng(element.event.venue.latitude, element.event.venue.longitude), stopover: true });
-                   }
-                   var contentString = '<div id="content">'+
-                        '<div id="siteNotice">'+
-                        '</div>'+
-                        '<h2 id="firstHeading" class="firstHeading">' + element.event.name.html + '</h2>'+
-                        '<div id="bodyContent">'+
-                        '<img src="' + element.event.logo.url + '" alt="Event logo">' +
-                        '</div>'+
-                        '</div>';
+                    if (idx === 0) {
+                       origin = new google.maps.LatLng(ebEvent.venue.latitude, ebEvent.venue.longitude);
+                    } else if (idx === array.length - 1) {
+                       destination = new google.maps.LatLng(ebEvent.venue.latitude, ebEvent.venue.longitude);
+                    } else {
+                       waypoints.push({ location: new google.maps.LatLng(ebEvent.venue.latitude, ebEvent.venue.longitude), stopover: true });
+                    }
 
                     var infowindow = new google.maps.InfoWindow({
-                        content: contentString
+                        content: getPerformanceInfowindowHTML(ebEvent),
+                        maxWidth: 300,
                     });
 
                     var marker = new google.maps.Marker({
-                        position: new google.maps.LatLng(element.event.venue.latitude, element.event.venue.longitude),
+                        position: new google.maps.LatLng(ebEvent.venue.latitude, ebEvent.venue.longitude),
                         map: map,
                         zIndex: 99999,
                         icon: image,
                     });
                     marker.addListener('mouseover', function() {
                         infowindow.open(map, marker);
-                        elemid = document.getElementById(element.event.id);
+                        elemid = document.getElementById(ebEvent.id);
                         $(elemid).css("background-color", "rgb(167, 166, 166)");
                     });
                     marker.addListener('mouseout', function() {
@@ -332,35 +366,16 @@ $(document).ready(function() {
                         $(elemid).css("background-color", "white");
                     });
 
-                    var startDate = moment(element.event.start.local).format("MMM Do YY")
-                    $listEvent.append(
-                        '<div class="py-1">' +
-                            '<a id="'+ element.event.id +'" href="' + element.event.url + '#tickets' +'" target="blank" class="list-group-item list-group-item-action flex-column align-items-start">' +
-                        '<div class="d-flex w-100 justify-content-between">' +
-                            '<h5 class="mb-1">' + element.event.name.text + '</h5>' +
-                            '<small>' + startDate + '</small>' +
-                        '</div>' +
-                            '<p class="mb-1">' + element.event.description.text + '</p>' +
-                        '</a></div>')
+                    $listEvent.append(getPerformanceRowHTML(ebEvent));
                 });
 
                 firstArtist = data.performances[0].artists[0].partner_artists[0];
-                if (firstArtist.partner_name === 'SPOTIFY') {
-                    var spotifyArtistId = firstArtist['partner_artist_id'];
-                    spotifyArtistId = spotifyArtistId.replace('spotify:artist:', '');
-
-                    $spotifyPlayer.append(
-                        '<iframe src="https://open.spotify.com/embed/artist/' + spotifyArtistId + '" width="400px" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>'
-                    );
-
-                    $spotifyPlayerRow.css("display", "flex");
-                };
+                showSpotifyPlayButton(firstArtist);
 
                 directionsService.route({
                     origin: origin,
                     destination: destination,
                     waypoints: waypoints,
-                    optimizeWaypoints: true,
                     travelMode: 'DRIVING'
                     }, function(response, status) {
                     if (status === 'OK') {
