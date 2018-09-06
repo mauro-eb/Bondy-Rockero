@@ -36,7 +36,12 @@
         }
         .right {
             overflow-y: scroll;
-            max-height: 90%;
+            max-height: 75%;
+        }
+
+        .spotify-player {
+            background-color: black;
+            max-width: 400px;
         }
     </style>
 </head>
@@ -49,10 +54,14 @@
             <div class="form-group col-sm-4">
                 <div class="row py-2">
                     <input id='input-name' type="text" placeholder="Search an Artist.." name="search" class="form-control-lg">
-                    <button id="button-search" type="submit" class="btn btn-secondary btn-lg active"><i class="fa fa-search"></i></button>
+                    <button id="button-search" type="submit" class="btn btn-secondary btn-lg active">
+                        <i class="fa fa-search"></i>
+                    </button>
                 </div>
                 <br>
-                <div id="spotify-player"></div>
+                <div id="spotify-player-row" class="row py-2 spotify-player-row">
+                    <div id="spotify-player" class="spotify-player rounded py-1"></div>
+                </div>
                 <div class="row right">
                     <div id='list-event' class="list-group list-group-mine"></div>
                 </div>
@@ -68,8 +77,163 @@ function myMap() {
     var myLatLng = new google.maps.LatLng(-32.8894587, -68.84583859999998);
     var mapCanvas = document.getElementById("map");
     var mapOptions = {
-    center: myLatLng,
-    zoom: 10
+        mapTypeControl: false,
+        center: myLatLng,
+        zoom: 10,
+        styles: [{
+            "elementType": "geometry",
+            "stylers": [{
+                "color": "#1d2c4d"
+            }]
+        }, {
+            "elementType": "labels.text.fill",
+            "stylers": [{
+                "color": "#8ec3b9"
+            }]
+        }, {
+            "elementType": "labels.text.stroke",
+            "stylers": [{
+                "color": "#1a3646"
+            }]
+        }, {
+            "featureType": "administrative.country",
+            "elementType": "geometry.stroke",
+            "stylers": [{
+                "color": "#4b6878"
+            }]
+        }, {
+            "featureType": "administrative.land_parcel",
+            "elementType": "labels.text.fill",
+            "stylers": [{
+                "color": "#64779e"
+            }]
+        }, {
+            "featureType": "administrative.province",
+            "elementType": "geometry.stroke",
+            "stylers": [{
+                "color": "#4b6878"
+            }]
+        }, {
+            "featureType": "landscape.man_made",
+            "elementType": "geometry.stroke",
+            "stylers": [{
+                "color": "#334e87"
+            }]
+        }, {
+            "featureType": "landscape.natural",
+            "elementType": "geometry",
+            "stylers": [{
+                "color": "#023e58"
+            }]
+        }, {
+            "featureType": "poi",
+            "elementType": "geometry",
+            "stylers": [{
+                "color": "#283d6a"
+            }]
+        }, {
+            "featureType": "poi",
+            "elementType": "labels.text.fill",
+            "stylers": [{
+                "color": "#6f9ba5"
+            }]
+        }, {
+            "featureType": "poi",
+            "elementType": "labels.text.stroke",
+            "stylers": [{
+                "color": "#1d2c4d"
+            }]
+        }, {
+            "featureType": "poi.park",
+            "elementType": "geometry.fill",
+            "stylers": [{
+                "color": "#023e58"
+            }]
+        }, {
+            "featureType": "poi.park",
+            "elementType": "labels.text.fill",
+            "stylers": [{
+                "color": "#3C7680"
+            }]
+        }, {
+            "featureType": "road",
+            "elementType": "geometry",
+            "stylers": [{
+                "color": "#304a7d"
+            }]
+        }, {
+            "featureType": "road",
+            "elementType": "labels.text.fill",
+            "stylers": [{
+                "color": "#98a5be"
+            }]
+        }, {
+            "featureType": "road",
+            "elementType": "labels.text.stroke",
+            "stylers": [{
+                "color": "#1d2c4d"
+            }]
+        }, {
+            "featureType": "road.highway",
+            "elementType": "geometry",
+            "stylers": [{
+                "color": "#2c6675"
+            }]
+        }, {
+            "featureType": "road.highway",
+            "elementType": "geometry.stroke",
+            "stylers": [{
+                "color": "#255763"
+            }]
+        }, {
+            "featureType": "road.highway",
+            "elementType": "labels.text.fill",
+            "stylers": [{
+                "color": "#b0d5ce"
+            }]
+        }, {
+            "featureType": "road.highway",
+            "elementType": "labels.text.stroke",
+            "stylers": [{
+                "color": "#023e58"
+            }]
+        }, {
+            "featureType": "transit",
+            "elementType": "labels.text.fill",
+            "stylers": [{
+                "color": "#98a5be"
+            }]
+        }, {
+            "featureType": "transit",
+            "elementType": "labels.text.stroke",
+            "stylers": [{
+                "color": "#1d2c4d"
+            }]
+        }, {
+            "featureType": "transit.line",
+            "elementType": "geometry.fill",
+            "stylers": [{
+                "color": "#283d6a"
+            }]
+        }, {
+            "featureType": "transit.station",
+            "elementType": "geometry",
+            "stylers": [{
+                "color": "#3a4762"
+            }]
+        }, {
+            "featureType": "water",
+            "elementType": "geometry",
+            "stylers": [{
+                "color": "#0e1626"
+            }]
+        }, {
+            "featureType": "water",
+            "elementType": "labels.text.fill",
+            "stylers": [{
+                "color": "#4e6d70"
+            }]
+        }]
     };
     map = new google.maps.Map(mapCanvas, mapOptions);
 
@@ -81,6 +245,7 @@ $(document).ready(function() {
         $inputArtist = $('#input-name'),
         $listEvent = $('#list-event'),
         $spotifyPlayer = $('#spotify-player'),
+        $spotifyPlayerRow = $('#spotify-player-row'),
         spinnerClass = "fa-circle-o-notch fa-spin";
 
     $inputArtist.keypress(function (key) {
@@ -90,120 +255,121 @@ $(document).ready(function() {
     });
 
     $buttonSearch.on('click', function(){
-    $searchIcon.toggleClass(spinnerClass);
-    $.get(
-    '/performances',
-    {
-        name: $inputArtist.val()
-    },
-        function(response){
-            data = $.parseJSON(response);
-            $listEvent.html('');
-            $spotifyPlayer.html('');
-            // For each
+        $searchIcon.toggleClass(spinnerClass);
+        $.get(
+            '/performances',
+            {
+                name: $inputArtist.val()
+            },
+            function(response){
+                data = $.parseJSON(response);
+                $listEvent.html('');
+                $spotifyPlayerRow.css("display", "none");
+                $spotifyPlayer.html('');
+                // For each
 
-            var waypoints = [];
-            var origin;
-            var destination;
-            var image = new google.maps.MarkerImage(
-              'static/eb-pick3.png',
-              new google.maps.Size(60, 60),
-              new google.maps.Point(0, 0),
-              new google.maps.Point(35, 55)
-            );
-            var markerOption = {
-                clickable: true,
-                flat: true,
-                icon: image,
-                visible: true,
-                map: map
-            };
-
-            var directionsService = new google.maps.DirectionsService;
-            var directionsDisplay = new google.maps.DirectionsRenderer({
-              markerOptions: markerOption,
-              polylineOptions: {
-                strokeColor: "#F05537"
-              }
-            });
-            directionsDisplay.setMap(map);
-
-            data.performances.forEach(function(element, idx, array) {
-
-               if (idx === 0) {
-                   origin = new google.maps.LatLng(element.event.venue.latitude, element.event.venue.longitude);
-               }
-               else if (idx === array.length - 1) {
-                   destination = new google.maps.LatLng(element.event.venue.latitude, element.event.venue.longitude);
-               }
-               else {
-                   waypoints.push({ location: new google.maps.LatLng(element.event.venue.latitude, element.event.venue.longitude), stopover: true });
-               }
-               var contentString = '<div id="content">'+
-                    '<div id="siteNotice">'+
-                    '</div>'+
-                    '<h2 id="firstHeading" class="firstHeading">' + element.event.name.html + '</h2>'+
-                    '<div id="bodyContent">'+
-                    '<img src="' + element.event.logo.url + '" alt="Event logo">' +
-                    '</div>'+
-                    '</div>';
-
-                var infowindow = new google.maps.InfoWindow({
-                    content: contentString
-                });
-
-                var marker = new google.maps.Marker({
-                    position: new google.maps.LatLng(element.event.venue.latitude, element.event.venue.longitude),
-                    map: map,
-                    zIndex: 99999,
-                    icon: image,
-                });
-                marker.addListener('mouseover', function() {
-                    infowindow.open(map, marker);
-                    elemid = document.getElementById(element.event.id);
-                    $(elemid).css("background-color", "rgb(167, 166, 166)");
-                });
-                marker.addListener('mouseout', function() {
-                    infowindow.close();
-                    $(elemid).css("background-color", "white");
-                });
-
-                var startDate = moment(element.event.start.local).format("MMM Do YY")
-                $listEvent.append(
-                    '<div>' +
-                        '<a id="'+ element.event.id +'" href="' + element.event.url + '#tickets' +'" target="blank" class="list-group-item list-group-item-action flex-column align-items-start">' +
-                    '<div class="d-flex w-100 justify-content-between">' +
-                        '<h5 class="mb-1">' + element.event.name.text + '</h5>' +
-                        '<small>' + startDate + '</small>' +
-                    '</div>' +
-                        '<p class="mb-1">' + element.event.description.text + '</p>' +
-                    '</a></div>')
-            });
-
-            firstArtist = data.performances[0].artists[0].partner_artists[0];
-            if (firstArtist.partner_name === 'SPOTIFY') {
-                var spotifyArtistId = firstArtist['partner_artist_id'];
-                spotifyArtistId = spotifyArtistId.replace('spotify:artist:', '');
-
-                $spotifyPlayer.append(
-                    '<iframe src="https://open.spotify.com/embed/artist/' + spotifyArtistId + '" width="95%" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>'
+                var waypoints = [];
+                var origin;
+                var destination;
+                var image = new google.maps.MarkerImage(
+                  'static/eb-pick3.png',
+                  new google.maps.Size(60, 60),
+                  new google.maps.Point(0, 0),
+                  new google.maps.Point(35, 55)
                 );
-            };
+                var markerOption = {
+                    clickable: true,
+                    flat: true,
+                    icon: image,
+                    visible: true,
+                    map: map
+                };
 
-            directionsService.route({
-                origin: origin,
-                destination: destination,
-                waypoints: waypoints,
-                optimizeWaypoints: true,
-                travelMode: 'DRIVING'
-                }, function(response, status) {
-                if (status === 'OK') {
-                    directionsDisplay.setDirections(response);
-                } else {
-                    window.alert('Directions request failed due to ' + status);
-                }
-            });
-        }
+                var directionsService = new google.maps.DirectionsService;
+                var directionsDisplay = new google.maps.DirectionsRenderer({
+                  markerOptions: markerOption,
+                  polylineOptions: {
+                    strokeColor: "#F05537"
+                  }
+                });
+                directionsDisplay.setMap(map);
+
+                data.performances.forEach(function(element, idx, array) {
+
+                   if (idx === 0) {
+                       origin = new google.maps.LatLng(element.event.venue.latitude, element.event.venue.longitude);
+                   } else if (idx === array.length - 1) {
+                       destination = new google.maps.LatLng(element.event.venue.latitude, element.event.venue.longitude);
+                   } else {
+                       waypoints.push({ location: new google.maps.LatLng(element.event.venue.latitude, element.event.venue.longitude), stopover: true });
+                   }
+                   var contentString = '<div id="content">'+
+                        '<div id="siteNotice">'+
+                        '</div>'+
+                        '<h2 id="firstHeading" class="firstHeading">' + element.event.name.html + '</h2>'+
+                        '<div id="bodyContent">'+
+                        '<img src="' + element.event.logo.url + '" alt="Event logo">' +
+                        '</div>'+
+                        '</div>';
+
+                    var infowindow = new google.maps.InfoWindow({
+                        content: contentString
+                    });
+
+                    var marker = new google.maps.Marker({
+                        position: new google.maps.LatLng(element.event.venue.latitude, element.event.venue.longitude),
+                        map: map,
+                        zIndex: 99999,
+                        icon: image,
+                    });
+                    marker.addListener('mouseover', function() {
+                        infowindow.open(map, marker);
+                        elemid = document.getElementById(element.event.id);
+                        $(elemid).css("background-color", "rgb(167, 166, 166)");
+                    });
+                    marker.addListener('mouseout', function() {
+                        infowindow.close();
+                        $(elemid).css("background-color", "white");
+                    });
+
+                    var startDate = moment(element.event.start.local).format("MMM Do YY")
+                    $listEvent.append(
+                        '<div class="py-1">' +
+                            '<a id="'+ element.event.id +'" href="' + element.event.url + '#tickets' +'" target="blank" class="list-group-item list-group-item-action flex-column align-items-start">' +
+                        '<div class="d-flex w-100 justify-content-between">' +
+                            '<h5 class="mb-1">' + element.event.name.text + '</h5>' +
+                            '<small>' + startDate + '</small>' +
+                        '</div>' +
+                            '<p class="mb-1">' + element.event.description.text + '</p>' +
+                        '</a></div>')
+                });
+
+                firstArtist = data.performances[0].artists[0].partner_artists[0];
+                if (firstArtist.partner_name === 'SPOTIFY') {
+                    var spotifyArtistId = firstArtist['partner_artist_id'];
+                    spotifyArtistId = spotifyArtistId.replace('spotify:artist:', '');
+
+                    $spotifyPlayer.append(
+                        '<iframe src="https://open.spotify.com/embed/artist/' + spotifyArtistId + '" width="400px" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>'
+                    );
+
+                    $spotifyPlayerRow.css("display", "flex");
+                };
+
+                directionsService.route({
+                    origin: origin,
+                    destination: destination,
+                    waypoints: waypoints,
+                    optimizeWaypoints: true,
+                    travelMode: 'DRIVING'
+                    }, function(response, status) {
+                    if (status === 'OK') {
+                        directionsDisplay.setDirections(response);
+                    } else {
+                        window.alert('Directions request failed due to ' + status);
+                    }
+                });
+            }
         ).fail(function(){
             $('#input-name').val("");
             var w = window.open("", "Message", "width=400, height=200");
